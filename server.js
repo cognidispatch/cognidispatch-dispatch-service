@@ -5,7 +5,7 @@ const { Server } = require('socket.io');
 const helmet = require('helmet');
 const cors = require('cors');
 
-const dbAdapter = require('../shared').dbAdapter;
+const dbAdapter = require('./shared').dbAdapter;
 const { publishDispatchCreated } = require('./serviceBusPublisher');
 
 const app = express();
