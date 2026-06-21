@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 const dbAdapter = require('../shared').dbAdapter;
+const { publishDispatchCreated } = require('./serviceBusPublisher');
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -120,6 +121,20 @@ io.on('connection', (socket) => {
       io.to(`room_v_${vendorId}`).emit('new-job-request', {
         dispatch: newDispatch
       });
+
+      // Fetch vendor details and publish to Service Bus for guaranteed notification delivery
+      dbAdapter.Vendors.findById(vendorId)
+        .then(vendorRecord => {
+          const vendorEmail = vendorRecord?.email || null;
+          if (vendorEmail) {
+            publishDispatchCreated(newDispatch, vendorEmail);
+          } else {
+            console.warn(`[ServiceBus] Vendor ${vendorId} has no email — skipping notification`);
+          }
+        })
+        .catch(err => {
+          console.error(`[ServiceBus] Failed to fetch vendor email for ${vendorId}:`, err.message);
+        });
     }
 
     console.log(`[Socket ${socket.id}] Dispatch ${dispatchId} pending acceptance by technician ${vendorId}`);
