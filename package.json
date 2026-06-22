@@ -12,5 +12,8 @@
     "socket.io": "^4.7.2",
     "dotenv": "^16.3.1",
     "cognidispatch-shared": "file:../shared"
+  },
+  "overrides": {
+    "ws": "^8.21.0"
   }
 }
