@@ -1,4 +1,4 @@
-﻿name: CI — Dispatch Service
+name: CI — Dispatch Service
 
 permissions:
   contents: write
@@ -73,12 +73,7 @@ jobs:
       docker_context: .
       service_name: dispatch-service
       sonar_project_key: cogni-dispatch-service
-    secrets:
-      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-      ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    secrets: inherit
 
   update-helm:
     name: Update Helm Chart
@@ -90,5 +85,4 @@ jobs:
       image-tag: ${{ needs.prepare.outputs.tag }}
       environment: ${{ needs.prepare.outputs.environment }}
       require-approval: ${{ needs.prepare.outputs.is_production == 'true' }}
-    secrets:
-      HELM_REPO_PAT: ${{ secrets.HELM_REPO_PAT }}
+    secrets: inherit
