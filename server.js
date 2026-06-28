@@ -272,3 +272,5 @@ const PORT = process.env.PORT || 5005;
 httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`Dispatch Service listening on port ${PORT}`);
 });
+
+// Trigger rebuild for Service Bus activation
